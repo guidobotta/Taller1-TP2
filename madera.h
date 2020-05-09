@@ -8,7 +8,7 @@ class Madera : public Resource {
 
     public:
         Madera();
-        virtual ResIndex getResourceType();
+        virtual void add(Inventory *inv) const;
 };
 
 #endif

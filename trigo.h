@@ -8,7 +8,7 @@ class Trigo : public Resource {
 
     public:
         Trigo();
-        virtual ResIndex getResourceType();
+        virtual void add(Inventory *inv) const;
 };
 
 #endif

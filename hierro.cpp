@@ -1,7 +1,5 @@
 #include "hierro.h"
 
-Hierro::Hierro() : Resource(HIERRO) {}
-
-ResIndex Hierro::getResourceType() {
-    return this->resourceType;
+void Hierro::add(Inventory *inv) const {
+    (*inv).add(this);
 }

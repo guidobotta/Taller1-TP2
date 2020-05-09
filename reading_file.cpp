@@ -7,5 +7,3 @@ ReadingFile::ReadingFile(const std::string path) {
 ReadingFile::~ReadingFile() {
     this->file.close();
 }
-
-

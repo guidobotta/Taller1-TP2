@@ -7,8 +7,7 @@ class Hierro : public Resource {
     private:
 
     public:
-        Hierro();
-        virtual ResIndex getResourceType();
+        virtual void add(Inventory *inv) const;
 };
 
 #endif

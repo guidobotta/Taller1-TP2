@@ -8,7 +8,7 @@ class Carbon : public Resource {
 
     public:
         Carbon();
-        virtual ResIndex getResourceType();
+        virtual void add(Inventory *inv) const;
 };
 
 #endif
