@@ -1,5 +1,7 @@
 #include "carbon.h"
 
-void Carbon::add(Inventory *inv) const{
-    (*inv).add(this);
+Carbon::Carbon() : Resource(CARBON) {}
+
+ResIndex Carbon::getResourceType() const {
+    return this->resourceType;
 }

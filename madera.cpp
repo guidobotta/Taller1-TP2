@@ -1,5 +1,7 @@
 #include "madera.h"
 
-void Madera::add(Inventory *inv) const{
-    (*inv).add(this);
+Madera::Madera() : Resource(MADERA) {}
+
+ResIndex Madera::getResourceType() const {
+    return this->resourceType;
 }

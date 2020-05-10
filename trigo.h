@@ -1,6 +1,7 @@
 #ifndef __TRIGO_H__
 #define __TRIGO_H__
 
+#include "inventory.h"
 #include "resource.h"
 
 class Trigo : public Resource {
@@ -8,7 +9,7 @@ class Trigo : public Resource {
 
     public:
         Trigo();
-        virtual void add(Inventory *inv) const;
+        virtual ResIndex getResourceType() const;
 };
 
 #endif

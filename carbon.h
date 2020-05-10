@@ -1,6 +1,7 @@
 #ifndef __CARBON_H__
 #define __CARBON_H__
 
+#include "inventory.h"
 #include "resource.h"
 
 class Carbon : public Resource {
@@ -8,7 +9,7 @@ class Carbon : public Resource {
 
     public:
         Carbon();
-        virtual void add(Inventory *inv) const;
+        virtual ResIndex getResourceType() const;
 };
 
 #endif

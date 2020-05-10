@@ -1,6 +1,7 @@
 #ifndef __MADERA_H__
 #define __MADERA_H__
 
+#include "inventory.h"
 #include "resource.h"
 
 class Madera : public Resource {
@@ -8,7 +9,7 @@ class Madera : public Resource {
 
     public:
         Madera();
-        virtual void add(Inventory *inv) const;
+        virtual ResIndex getResourceType() const;
 };
 
 #endif

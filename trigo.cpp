@@ -1,5 +1,7 @@
 #include "trigo.h"
 
-void Trigo::add(Inventory *inv) const{
-    (*inv).add(this);
+Trigo::Trigo() : Resource(TRIGO) {}
+
+ResIndex Trigo::getResourceType() const {
+    return this->resourceType;
 }
