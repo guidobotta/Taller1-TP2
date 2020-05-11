@@ -1,18 +1,29 @@
 #include "collector_manager.h"
+#include "collector.h"
+
+void CollectorManager::findStartCollector(const std::string &strConfig, 
+                            ResBlockingQueue &queue, Inventory &inventory,
+                            const std::string &tipo, CollectorManager *cM) {
+    std::string::size_type wordIndex;
+    int nCollectors;
+    wordIndex = strConfig.find(tipo);
+    nCollectors = std::stoi(strConfig.substr(wordIndex + tipo.length()));
+    for (int i = 0; i < nCollectors; i++) {
+        std::thread tCollector { Collector(queue, inventory) };
+        cM->collectorList.push_back(tCollector);
+    }
+}
 
 CollectorManager::CollectorManager(const std::string &strConfig, 
                 ResBlockingQueue &trigoQueue, ResBlockingQueue &maderaQueue, 
                 ResBlockingQueue &carHieQueue, Inventory &inventory) {
-    //BUSCAR CADA TRABAJADOR Y CREAR SU RESPECTIVO HILO
+    findStartCollector(strConfig, trigoQueue, inventory, "Agricultores", this);
+    findStartCollector(strConfig, maderaQueue, inventory, "Leniadores", this);
+    findStartCollector(strConfig, carHieQueue, inventory, "Mineros", this);
+}
 
-    std::string::size_type wordIndex;
-    int nWorkers;
-
-    wordIndex = strConfig.find("Agricultores");
-    nWorkers = std::stoi(strConfig.substr(wordIndex + 13, 1));
-    for (int i = 0; i < nWorkers; i++) {
-        std::thread tWorker;
-        this->collectorList.push_back(tWorker);
-        tWorker();
+void CollectorManager::join() {
+    for (int i = 0; i < this->collectorList.size(); i++) {
+        this->collectorList[i].join();
     }
 }

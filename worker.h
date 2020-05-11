@@ -11,11 +11,12 @@
 */
 class Worker {
     private:
-        Inventory inventory;
-        Score score;
+        Inventory &inventory;
+        Score &score;
 
     public:
         Worker(Inventory &anInventory, Score &anScore);
+        void operator()();
 };
 
 #endif

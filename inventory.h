@@ -12,13 +12,16 @@ class Inventory {
         std::list <const Resource*> carList;
         std::list <const Resource*> hieList;
         std::mutex mux;
+        bool isClosed;
 
     public:
+        Inventory();
         void add(const Resource *item);
         int getTrigoAmount();
         int getMaderaAmount();
         int getCarbonAmount();
         int getHierroAmount();
+        void close();
 };
 
 #endif

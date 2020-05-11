@@ -1,5 +1,7 @@
 #include "inventory.h"
 
+Inventory::Inventory() : isClosed(false) {}
+
 void Inventory::add(const Resource *item) {
     std::unique_lock<std::mutex> lk(mux);
     ResIndex type = (*item).getResourceType();
@@ -18,6 +20,8 @@ void Inventory::add(const Resource *item) {
         this->hieList.push_back(item);
         break;
     }
+
+    /* this->condVar.notify_all(); */
 }
 
 int Inventory::getTrigoAmount() {
@@ -34,4 +38,10 @@ int Inventory::getCarbonAmount() {
 
 int Inventory::getHierroAmount() {
     return this->hieList.size();
+}
+
+void Inventory::close() {
+    /* Necesario?? */
+    //std::unique_lock<std::mutex> lk(mux);
+    this->isClosed = true;
 }

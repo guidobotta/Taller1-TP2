@@ -1,47 +1,28 @@
 #include "work_manager.h"
+#include "worker.h"
+
+void WorkManager::findStartWorker(const std::string &strConfig, 
+                                Inventory &inventory, Score &score,
+                                const std::string &tipo, WorkManager *wM) {
+    std::string::size_type wordIndex;
+    int nWorkers;
+    wordIndex = strConfig.find(tipo);
+    nWorkers = std::stoi(strConfig.substr(wordIndex + tipo.length()));
+    for (int i = 0; i < nWorkers; i++) {
+        std::thread tWorker { Worker(inventory, score) };
+        wM->workerList.push_back(tWorker);
+    }
+}
 
 WorkManager::WorkManager(const std::string &strConfig, Inventory &inventory, 
                         Score &score) {
-    //BUSCAR CADA TRABAJADOR Y CREAR SU RESPECTIVO HILO
+    findStartWorker(strConfig, inventory, score, "Cocineros", this);
+    findStartWorker(strConfig, inventory, score, "Carpinteros", this);
+    findStartWorker(strConfig, inventory, score, "Armeros", this);
+}
 
-    std::string::size_type wordIndex;
-    int nWorkers;
-
-    wordIndex = strConfig.find("Agricultores");
-    nWorkers = std::stoi(strConfig.substr(wordIndex + 13, 1));
-    for (int i = 0; i < nWorkers; i++) {
-        std::thread tWorker;
-        this->workerList.push_back(tWorker);
-        //tWorker();
+void WorkManager::join() {
+    for (int i = 0; i < this->workerList.size(); i++) {
+        this->workerList[i].join();
     }
-    //  wordIndex = strConfig.find("Leniadores");
-    //  nWorkers = std::stoi(strConfig.substr(wordIndex + 11, 1));
-    //  for (int i = 0; i < nWorkers; i++) {
-    //      std::thread tWorker(/*algo*/);
-    //      this->workerList.push_back(tWorker);
-    //  }
-    //  wordIndex = strConfig.find("Mineros");
-    //  nWorkers = std::stoi(strConfig.substr(wordIndex + 8, 1));
-    //  for (int i = 0; i < nWorkers; i++) {
-    //      std::thread tWorker(/*algo*/);
-    //      this->workerList.push_back(tWorker);
-    //  }
-    //  wordIndex = strConfig.find("Cocineros");
-    //  nWorkers = std::stoi(strConfig.substr(wordIndex + 10, 1));
-    //  for (int i = 0; i < nWorkers; i++) {
-    //      std::thread tWorker(/*algo*/);
-    //      this->workerList.push_back(tWorker);
-    //  }
-    //  wordIndex = strConfig.find("Carpinteros");
-    //  nWorkers = std::stoi(strConfig.substr(wordIndex + 12, 1));
-    //  for (int i = 0; i < nWorkers; i++) {
-    //      std::thread tWorker(/*algo*/);
-    //      this->workerList.push_back(tWorker);
-    //  }
-    //  wordIndex = strConfig.find("Armeros");
-    //  nWorkers = std::stoi(strConfig.substr(wordIndex + 8, 1));
-    //  for (int i = 0; i < nWorkers; i++) {
-    //      std::thread tWorker(/*algo*/);
-    //      this->workerList.push_back(tWorker);
-    //  }
 }

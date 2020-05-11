@@ -31,7 +31,7 @@ int main(int argc, char const *argv[]) {
     //inicializar salida
     Score finalScore(inventory);
 
-    //leo archivo de trabajadores
+    //leo archivo de recolectores y trabajadores
     ReadingFile fileWorkers(argv[1]);
     
     std::string completeStr;
@@ -43,6 +43,7 @@ int main(int argc, char const *argv[]) {
 
     //inicializo trabajadores
     WorkManager workManager(completeStr, inventory, finalScore);
+    /* FALTA COMPLETAR FUNCIONALIDAD DE LOS TRABAJADORES Y DEL INVENTARIO */
 
     //inicializar thread mapeo
     ReadingFile fileMap(argv[2]);
@@ -63,15 +64,15 @@ int main(int argc, char const *argv[]) {
 
     //join thread recolectores
 
-
+    collectorManager.join();
 
     //cierro inventario
 
-    /*inventory.close()*/
+    inventory.close();
 
     //join thread de trabajadores
 
-
+    workManager.join();
 
     //imprimo salida
 

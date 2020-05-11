@@ -15,7 +15,8 @@ class Collector {
         Inventory &inventory;
 
     public:
-
+        Collector(ResBlockingQueue &aResQueue, Inventory &anInventory);
+        void operator()();
 };
 
 #endif
