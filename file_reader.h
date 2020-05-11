@@ -4,15 +4,16 @@
 #include <fstream>
 #include <string>
 
-class ReadingFile {
+class FileReader {
     private:
         std::ifstream file;
 
     public:
-        ReadingFile(const std::string &path);
-        ~ReadingFile();
+        FileReader(const std::string &path);
+        ~FileReader();
         void getLine(std::string &str);
         void getCompleteFile(std::string &str);
+        bool eof();
 };
 
 #endif

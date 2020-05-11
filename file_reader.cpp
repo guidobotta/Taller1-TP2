@@ -1,14 +1,14 @@
-#include "reading_file.h"
+#include "file_reader.h"
 
-ReadingFile::ReadingFile(const std::string &path) {
+FileReader::FileReader(const std::string &path) {
     this->file.open(path, std::ios::in);
 }
 
-ReadingFile::~ReadingFile() {
+FileReader::~FileReader() {
     this->file.close();
 }
 
-void ReadingFile::getLine(std::string &str) {
+void FileReader::getLine(std::string &str) {
     str = "";
 
     if (this->file.is_open()) {
@@ -16,7 +16,7 @@ void ReadingFile::getLine(std::string &str) {
     }
 }
 
-void ReadingFile::getCompleteFile(std::string &str) {
+void FileReader::getCompleteFile(std::string &str) {
     std::string filestr;
     str = "";
 
@@ -26,4 +26,8 @@ void ReadingFile::getCompleteFile(std::string &str) {
             str.append(filestr);
         }
     }
+}
+
+bool FileReader::eof() {
+    return this->file.eof();
 }

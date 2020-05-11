@@ -4,10 +4,11 @@
 #include "carbon.h"
 #include "hierro.h"
 #include "res_blocking_queue.h"
-#include "reading_file.h"
+#include "file_reader.h"
 #include "work_manager.h"
 #include "score.h"
 #include "collector_manager.h"
+#include "map_reader.h"
 #include <iostream>
 #include <thread>
 
@@ -32,29 +33,25 @@ int main(int argc, char const *argv[]) {
     Score finalScore(inventory);
 
     //leo archivo de recolectores y trabajadores
-    ReadingFile fileWorkers(argv[1]);
-    
+    FileReader fileWorkers(argv[1]);    
     std::string completeStr;
     fileWorkers.getCompleteFile(completeStr);
+
+    //inicializo trabajadores
+    WorkManager workManager(completeStr, inventory, finalScore); //AÑADIR TIEMPO MUERTO!!
+    /* FALTA COMPLETAR FUNCIONALIDAD DE LOS TRABAJADORES Y DEL INVENTARIO */
 
     //incializo recolectores
     CollectorManager collectorManager(completeStr, trigoQueue, maderaQueue, 
                                     carHieQueue, inventory);
 
-    //inicializo trabajadores
-    WorkManager workManager(completeStr, inventory, finalScore);
-    /* FALTA COMPLETAR FUNCIONALIDAD DE LOS TRABAJADORES Y DEL INVENTARIO */
-
     //inicializar thread mapeo
-    ReadingFile fileMap(argv[2]);
-
-
-
-
+    FileReader fileMap(argv[2]);
+    std::thread map {MapReader(fileMap, trigoQueue, maderaQueue, carHieQueue)};
 
     //join thread del mapeo
 
-    
+    map.join();
 
     //cierro colas
 
