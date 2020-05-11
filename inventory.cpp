@@ -19,3 +19,19 @@ void Inventory::add(const Resource *item) {
         break;
     }
 }
+
+int Inventory::getTrigoAmount() {
+    return this->triList.size();
+}
+
+int Inventory::getMaderaAmount() {
+    return this->madList.size();
+}
+
+int Inventory::getCarbonAmount() {
+    return this->carList.size();
+}
+
+int Inventory::getHierroAmount() {
+    return this->hieList.size();
+}

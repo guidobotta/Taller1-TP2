@@ -6,6 +6,8 @@
 #include "res_blocking_queue.h"
 #include "reading_file.h"
 #include "work_manager.h"
+#include "score.h"
+#include "collector_manager.h"
 #include <iostream>
 #include <thread>
 
@@ -26,21 +28,54 @@ int main(int argc, char const *argv[]) {
     //inicializar inventario
     Inventory inventory;
 
-    //inicializar workers
+    //inicializar salida
+    Score finalScore(inventory);
+
+    //leo archivo de trabajadores
     ReadingFile fileWorkers(argv[1]);
     
     std::string completeStr;
     fileWorkers.getCompleteFile(completeStr);
 
-    WorkManager workManager(completeStr);
-    
-    //leer mapa y empezar a enviar datos a las colas
+    //incializo recolectores
+    CollectorManager collectorManager(completeStr, trigoQueue, maderaQueue, 
+                                    carHieQueue, inventory);
+
+    //inicializo trabajadores
+    WorkManager workManager(completeStr, inventory, finalScore);
+
+    //inicializar thread mapeo
     ReadingFile fileMap(argv[2]);
 
-    //iniciarlizar la salida out
 
-    //join threads
-    //join map, colas, inv, recolec, trabaj
 
-    return 0;
+
+
+    //join thread del mapeo
+
+    
+
+    //cierro colas
+
+    trigoQueue.close();
+    maderaQueue.close();
+    carHieQueue.close();
+
+    //join thread recolectores
+
+
+
+    //cierro inventario
+
+    /*inventory.close()*/
+
+    //join thread de trabajadores
+
+
+
+    //imprimo salida
+
+    finalScore.printScore();
+
+    return SUCCESS;
 }

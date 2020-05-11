@@ -5,12 +5,16 @@
 #include <list>
 #include <thread>
 
+#include "inventory.h"
+#include "score.h"
+
 class WorkManager {
     private:
         std::list <std::thread> workerList;
 
     public:
-        WorkManager(const std::string &strConfig);
+        WorkManager(const std::string &strConfig, Inventory &inventory, 
+                    Score &score);
 };
 
 #endif

@@ -15,6 +15,10 @@ class Inventory {
 
     public:
         void add(const Resource *item);
+        int getTrigoAmount();
+        int getMaderaAmount();
+        int getCarbonAmount();
+        int getHierroAmount();
 };
 
 #endif
