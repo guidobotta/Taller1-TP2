@@ -10,6 +10,7 @@ class Score {
 
     public:
         Score(Inventory &anInventory);
+        void addToScore(int points);
         void printScore();
 };
 

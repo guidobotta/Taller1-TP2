@@ -7,13 +7,15 @@
 
 #include "inventory.h"
 #include "score.h"
+#include "worker.h"
 
 class WorkManager {
     private:
         std::vector <std::thread> workerList;
         static void findStartWorker(const std::string &strConfig, 
                                 Inventory &inventory, Score &score,
-                                const std::string &tipo, WorkManager *wM);
+                                const std::string &tipo, WorkManager *wM,
+                                const WorkType &aWorkType);
 
     public:
         WorkManager(const std::string &strConfig, Inventory &inventory, 

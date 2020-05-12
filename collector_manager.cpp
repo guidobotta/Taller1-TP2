@@ -7,10 +7,9 @@ void CollectorManager::findStartCollector(const std::string &strConfig,
     std::string::size_type wordIndex;
     int nCollectors;
     wordIndex = strConfig.find(tipo);
-    nCollectors = std::stoi(strConfig.substr(wordIndex + tipo.length()));
+    nCollectors = std::stoi(strConfig.substr(wordIndex + tipo.length() + 1));
     for (int i = 0; i < nCollectors; i++) {
-        std::thread tCollector { Collector(queue, inventory) };
-        cM->collectorList.push_back(tCollector);
+        cM->collectorList.push_back(std::thread {Collector(queue, inventory)});
     }
 }
 

@@ -5,6 +5,10 @@ Score::Score(Inventory &anInventory) :
     finalScore(0),
     inventory(anInventory) {}
 
+void Score::addToScore(int points) {
+    this->finalScore += points;
+}
+
 void Score::printScore() { 
     std::cout << "Recursos restantes:" << std::endl;
     std::cout << "-  Trigo: " << this->inventory.getTrigoAmount() 

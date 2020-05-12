@@ -1,20 +1,15 @@
 #ifndef __RESOURCE_H__
 #define __RESOURCE_H__
 
-#define TRIGO 0
-#define MADERA 1
-#define CARBON 2
-#define HIERRO 3
-
-typedef const int ResIndex;
+enum ResType {TRIGO, MADERA, CARBON, HIERRO};
 
 class Resource {
     protected:
-        const ResIndex resourceType;
+        const ResType resourceType;
 
     public:
-        Resource(const ResIndex &aResourceType) : resourceType(aResourceType) {}
-        virtual ResIndex getResourceType() const = 0;
+        Resource(const ResType &aResourceType);
+        virtual ResType getResourceType() const;
 };
 
 #endif

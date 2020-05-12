@@ -1,8 +1,5 @@
 #include "map_reader.h"
-#include "trigo.h"
-#include "madera.h"
-#include "carbon.h"
-#include "hierro.h"
+#include "resource.h"
 #include <string>
 
 MapReader::MapReader(FileReader &aFileReader, ResBlockingQueue &aTriQueue,
@@ -18,19 +15,19 @@ void MapReader::operator()() {
         for (int i = 0; i < line.length(); i++) {
             switch (line[i]) {
             case 'T':
-                this->triQueue.push(new Trigo()); //NECESITO HACERLO ASI O PUEDO NO HACER EL NEW??
+                this->triQueue.push(new Resource(TRIGO)); //NECESITO HACERLO ASI O PUEDO NO HACER EL NEW??
                 break;
             
             case 'M':
-                this->madQueue.push(new Madera());
+                this->madQueue.push(new Resource(MADERA));
                 break;
 
             case 'C':
-                this->carHieQueue.push(new Carbon());
+                this->carHieQueue.push(new Resource(CARBON));
                 break;
 
             case 'H':
-                this->carHieQueue.push(new Hierro());
+                this->carHieQueue.push(new Resource(HIERRO));
                 break;
             }
         }

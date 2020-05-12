@@ -1,8 +1,4 @@
 #include "resource.h"
-#include "trigo.h"
-#include "madera.h"
-#include "carbon.h"
-#include "hierro.h"
 #include "res_blocking_queue.h"
 #include "file_reader.h"
 #include "work_manager.h"
@@ -38,8 +34,7 @@ int main(int argc, char const *argv[]) {
     fileWorkers.getCompleteFile(completeStr);
 
     //inicializo trabajadores
-    WorkManager workManager(completeStr, inventory, finalScore); //AÑADIR TIEMPO MUERTO!!
-    /* FALTA COMPLETAR FUNCIONALIDAD DE LOS TRABAJADORES Y DEL INVENTARIO */
+    WorkManager workManager(completeStr, inventory, finalScore); 
 
     //incializo recolectores
     CollectorManager collectorManager(completeStr, trigoQueue, maderaQueue, 

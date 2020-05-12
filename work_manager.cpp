@@ -3,22 +3,24 @@
 
 void WorkManager::findStartWorker(const std::string &strConfig, 
                                 Inventory &inventory, Score &score,
-                                const std::string &tipo, WorkManager *wM) {
+                                const std::string &tipo, WorkManager *wM,
+                                const WorkType &aWorkType) {
     std::string::size_type wordIndex;
     int nWorkers;
     wordIndex = strConfig.find(tipo);
-    nWorkers = std::stoi(strConfig.substr(wordIndex + tipo.length()));
+    nWorkers = std::stoi(strConfig.substr(wordIndex + tipo.length() + 1));
     for (int i = 0; i < nWorkers; i++) {
-        std::thread tWorker { Worker(inventory, score) };
-        wM->workerList.push_back(tWorker);
+        wM->workerList.push_back(std::thread { Worker(inventory, score, 
+                                                aWorkType) } );
     }
 }
 
 WorkManager::WorkManager(const std::string &strConfig, Inventory &inventory, 
                         Score &score) {
-    findStartWorker(strConfig, inventory, score, "Cocineros", this);
-    findStartWorker(strConfig, inventory, score, "Carpinteros", this);
-    findStartWorker(strConfig, inventory, score, "Armeros", this);
+    findStartWorker(strConfig, inventory, score, "Cocineros", this, COCINERO);
+    findStartWorker(strConfig, inventory, score, "Carpinteros", this, 
+                    CARPINTERO);
+    findStartWorker(strConfig, inventory, score, "Armeros", this, ARMERO);
 }
 
 void WorkManager::join() {
