@@ -1,6 +1,8 @@
 #include "collector.h"
 #include <unistd.h>
 
+#include <iostream>
+
 Collector::Collector(ResBlockingQueue &aResQueue, Inventory &anInventory) : 
     inventory(anInventory), resQueue(aResQueue) {}
 
@@ -9,6 +11,6 @@ void Collector::operator()() {
     while(resource != NULL) {
         usleep(60000);
         inventory.add(resource);
-        const Resource *resource = this->resQueue.pop();
+        resource = this->resQueue.pop();
     }
 }
