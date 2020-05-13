@@ -7,6 +7,7 @@
 #include "map_reader.h"
 #include <iostream>
 #include <thread>
+#include <string>
 
 #define SUCCESS 0
 #define ERROR 1

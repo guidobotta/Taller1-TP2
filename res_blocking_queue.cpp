@@ -24,8 +24,6 @@ const Resource* ResBlockingQueue::pop() {
 }
 
 void ResBlockingQueue::close() {
-    /* Necesito que sea bloqueante? */
-    //std::unique_lock<std::mutex> lk(mux);
     this->isClosed = true;
     this->condVar.notify_all();
 }

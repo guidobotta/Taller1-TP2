@@ -1,4 +1,5 @@
 #include "file_reader.h"
+#include <string>
 
 FileReader::FileReader(const std::string &path) {
     this->file.open(path, std::ios::in);

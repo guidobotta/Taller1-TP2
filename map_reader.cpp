@@ -12,10 +12,10 @@ void MapReader::operator()() {
     while (!this->fileReader.eof()) {
         this->fileReader.getLine(line);
 
-        for (int i = 0; i < line.length(); i++) {
+        for (std::size_t i = 0; i < line.length(); i++) {
             switch (line[i]) {
             case 'T':
-                this->triQueue.push(new Resource(TRIGO)); //NECESITO HACERLO ASI O PUEDO NO HACER EL NEW??
+                this->triQueue.push(new Resource(TRIGO));
                 break;
             
             case 'M':

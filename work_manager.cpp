@@ -1,5 +1,6 @@
 #include "work_manager.h"
 #include "worker.h"
+#include <string>
 
 void WorkManager::findStartWorker(const std::string &strConfig, 
                                 Inventory &inventory, Score &score,
@@ -11,7 +12,7 @@ void WorkManager::findStartWorker(const std::string &strConfig,
     nWorkers = std::stoi(strConfig.substr(wordIndex + tipo.length() + 1));
     for (int i = 0; i < nWorkers; i++) {
         wM->workerList.push_back(std::thread { Worker(inventory, score, 
-                                                aWorkType) } );
+                                                aWorkType) });
     }
 }
 
@@ -24,7 +25,7 @@ WorkManager::WorkManager(const std::string &strConfig, Inventory &inventory,
 }
 
 void WorkManager::join() {
-    for (int i = 0; i < this->workerList.size(); i++) {
+    for (std::size_t i = 0; i < this->workerList.size(); i++) {
         this->workerList[i].join();
     }
 }

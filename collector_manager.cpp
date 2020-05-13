@@ -1,5 +1,6 @@
 #include "collector_manager.h"
 #include "collector.h"
+#include <string>
 
 void CollectorManager::findStartCollector(const std::string &strConfig, 
                             ResBlockingQueue &queue, Inventory &inventory,
@@ -22,7 +23,7 @@ CollectorManager::CollectorManager(const std::string &strConfig,
 }
 
 void CollectorManager::join() {
-    for (int i = 0; i < this->collectorList.size(); i++) {
+    for (std::size_t i = 0; i < this->collectorList.size(); i++) {
         this->collectorList[i].join();
     }
 }

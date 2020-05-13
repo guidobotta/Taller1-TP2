@@ -82,8 +82,6 @@ int Inventory::getHierroAmount() {
 }
 
 void Inventory::close() {
-    /* Necesario?? */
-    //std::unique_lock<std::mutex> lk(mux);
     this->isClosed = true;
     this->condVar.notify_all();
 }

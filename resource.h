@@ -8,7 +8,7 @@ class Resource {
         const ResType resourceType;
 
     public:
-        Resource(const ResType &aResourceType);
+        explicit Resource(const ResType &aResourceType);
         virtual ResType getResourceType() const;
 };
 

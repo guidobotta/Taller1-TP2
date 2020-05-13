@@ -9,7 +9,7 @@ class Score {
         Inventory &inventory;
 
     public:
-        Score(Inventory &anInventory);
+        explicit Score(Inventory &anInventory);
         void addToScore(int points);
         void printScore();
 };
