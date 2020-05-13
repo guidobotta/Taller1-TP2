@@ -9,7 +9,7 @@ class Resource {
 
     public:
         explicit Resource(const ResType &aResourceType);
-        virtual ResType getResourceType() const;
+        ResType getResourceType() const;
 };
 
 #endif

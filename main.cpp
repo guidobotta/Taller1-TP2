@@ -71,5 +71,9 @@ int main(int argc, char const *argv[]) {
 
     finalScore.printScore();
 
+    //limpio inventario
+
+    inventory.clean();
+
     return SUCCESS;
 }

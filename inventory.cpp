@@ -35,18 +35,22 @@ bool Inventory::enoughMaterials(int trigo, int madera, int carbon, int hierro) {
 
 void Inventory::getDelete(int trigo, int madera, int carbon, int hierro) {
     for (int i = 0; i < trigo; i++) {
+        delete(triList.back());
         triList.pop_back();
     }
 
     for (int i = 0; i < madera; i++) {
+        delete(madList.back());
         madList.pop_back();
     }
 
     for (int i = 0; i < carbon; i++) {
+        delete(carList.back());
         carList.pop_back();
     }
 
     for (int i = 0; i < hierro; i++) {
+        delete(hieList.back());
         hieList.pop_back();
     }
 }
@@ -84,4 +88,23 @@ int Inventory::getHierroAmount() {
 void Inventory::close() {
     this->isClosed = true;
     this->condVar.notify_all();
+}
+
+void Inventory::clean() {
+    while (!this->triList.empty()) {
+        delete(triList.back());
+        triList.pop_back();
+    }
+    while (!this->madList.empty()) {
+        delete(madList.back());
+        madList.pop_back();
+    }
+    while (!this->carList.empty()) {
+        delete(carList.back());
+        carList.pop_back();
+    }
+    while (!this->hieList.empty()) {
+        delete(hieList.back());
+        hieList.pop_back();
+    }
 }
