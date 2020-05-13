@@ -32,3 +32,10 @@ bool ResBlockingQueue::isEmpty() {
     std::unique_lock<std::mutex> lk(mux);
     return this->resQueue.empty();
 }
+
+void ResBlockingQueue::clean() {
+    while (!this->resQueue.empty()) {
+        delete(this->resQueue.front());
+        this->resQueue.pop();
+    }
+}

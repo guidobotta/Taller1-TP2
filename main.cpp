@@ -71,9 +71,12 @@ int main(int argc, char const *argv[]) {
 
     finalScore.printScore();
 
-    //limpio inventario
+    //limpio inventario y colas
 
     inventory.clean();
+    trigoQueue.clean();
+    maderaQueue.clean();
+    carHieQueue.clean();
 
     return SUCCESS;
 }
