@@ -11,13 +11,13 @@ void Score::addToScore(int points) {
 
 void Score::printScore() { 
     std::cout << "Recursos restantes:" << std::endl;
-    std::cout << "-  Trigo: " << this->inventory.getTrigoAmount() 
+    std::cout << "  - Trigo: " << this->inventory.getTrigoAmount() 
         << std::endl;
-    std::cout << "-  Madera: " << this->inventory.getMaderaAmount() 
+    std::cout << "  - Madera: " << this->inventory.getMaderaAmount() 
         << std::endl;
-    std::cout << "-  Carbon: " << this->inventory.getCarbonAmount() 
+    std::cout << "  - Carbon: " << this->inventory.getCarbonAmount() 
         << std::endl;
-    std::cout << "-  Hierro: " << this->inventory.getHierroAmount() 
+    std::cout << "  - Hierro: " << this->inventory.getHierroAmount() 
         << std::endl;
     std::cout << std::endl;
     std::cout << "Puntos de Beneficio acumulados: " << this->finalScore 
