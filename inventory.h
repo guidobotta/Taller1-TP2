@@ -27,7 +27,7 @@ class Inventory {
         int getCarbonAmount();
         int getHierroAmount();
         void close();
-        void clean();
+        ~Inventory();
 };
 
 #endif

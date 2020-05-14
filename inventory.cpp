@@ -90,7 +90,7 @@ void Inventory::close() {
     this->condVar.notify_all();
 }
 
-void Inventory::clean() {
+Inventory::~Inventory() {
     while (!this->triList.empty()) {
         delete(triList.back());
         triList.pop_back();

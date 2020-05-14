@@ -12,71 +12,56 @@
 #define SUCCESS 0
 #define ERROR 1
 
+int work(char const *argv[], ResBlockingQueue &trigoQueue, 
+        ResBlockingQueue &maderaQueue, ResBlockingQueue &carHieQueue,
+        Inventory &inventory, Score &finalScore) {
+    FileReader fileWorkers(argv[1]);
+    std::string completeStr;
+    fileWorkers.getCompleteFile(completeStr);
+
+    WorkManager workManager(completeStr, inventory, finalScore); 
+
+    CollectorManager collectorManager(completeStr, trigoQueue, maderaQueue, 
+                                    carHieQueue, inventory);
+
+    FileReader fileMap(argv[2]);
+    std::thread map {MapReader(fileMap, trigoQueue, maderaQueue, carHieQueue)};
+
+    map.join();
+
+    trigoQueue.close();
+    maderaQueue.close();
+    carHieQueue.close();
+
+    collectorManager.join();
+
+    inventory.close();
+
+    workManager.join();
+
+    return SUCCESS;
+}
+
 int main(int argc, char const *argv[]) {
     if (argc != 3) {
         std::cout << "Error en la cantidad de parámetros.\n";
         return ERROR;
     }
 
-    //inicializar colas
     ResBlockingQueue trigoQueue;
     ResBlockingQueue maderaQueue;
     ResBlockingQueue carHieQueue;
 
-    //inicializar inventario
     Inventory inventory;
 
-    //inicializar salida
     Score finalScore(inventory);
 
-    //leo archivo de recolectores y trabajadores
-    FileReader fileWorkers(argv[1]);    
-    std::string completeStr;
-    fileWorkers.getCompleteFile(completeStr);
-
-    //inicializo trabajadores
-    WorkManager workManager(completeStr, inventory, finalScore); 
-
-    //incializo recolectores
-    CollectorManager collectorManager(completeStr, trigoQueue, maderaQueue, 
-                                    carHieQueue, inventory);
-
-    //inicializar thread mapeo
-    FileReader fileMap(argv[2]);
-    std::thread map {MapReader(fileMap, trigoQueue, maderaQueue, carHieQueue)};
-
-    //join thread del mapeo
-
-    map.join();
-
-    //cierro colas
-
-    trigoQueue.close();
-    maderaQueue.close();
-    carHieQueue.close();
-
-    //join thread recolectores
-
-    collectorManager.join();
-
-    //cierro inventario
-
-    inventory.close();
-
-    //join thread de trabajadores
-
-    workManager.join();
-
-    //imprimo salida
+    if (work(argv, trigoQueue, maderaQueue, carHieQueue, inventory, finalScore)
+        == ERROR) {
+        return ERROR;
+    }
 
     finalScore.printScore();
-
-    //limpio inventario y colas
-
-    inventory.clean();
-    trigoQueue.clean();
-    maderaQueue.clean();
-    carHieQueue.clean();
 
     return SUCCESS;
 }

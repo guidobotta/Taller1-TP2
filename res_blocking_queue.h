@@ -19,7 +19,7 @@ class ResBlockingQueue {
         const Resource* pop();
         void close();
         bool isEmpty();
-        void clean();
+        ~ResBlockingQueue();
 };
 
 #endif

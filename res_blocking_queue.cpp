@@ -33,7 +33,7 @@ bool ResBlockingQueue::isEmpty() {
     return this->resQueue.empty();
 }
 
-void ResBlockingQueue::clean() {
+ResBlockingQueue::~ResBlockingQueue() {
     while (!this->resQueue.empty()) {
         delete(this->resQueue.front());
         this->resQueue.pop();
