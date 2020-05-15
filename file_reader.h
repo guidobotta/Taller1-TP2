@@ -14,6 +14,7 @@ class FileReader {
         void getLine(std::string &str);
         void getCompleteFile(std::string &str);
         bool eof();
+        bool isOpen();
 };
 
 #endif

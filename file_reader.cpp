@@ -32,3 +32,7 @@ void FileReader::getCompleteFile(std::string &str) {
 bool FileReader::eof() {
     return this->file.eof();
 }
+
+bool FileReader::isOpen() {
+    return this->file.is_open();
+}

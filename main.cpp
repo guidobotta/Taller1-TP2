@@ -12,21 +12,10 @@
 #define SUCCESS 0
 #define ERROR 1
 
-int work(char const *argv[], ResBlockingQueue &trigoQueue, 
-        ResBlockingQueue &maderaQueue, ResBlockingQueue &carHieQueue,
-        Inventory &inventory, Score &finalScore) {
-    FileReader fileWorkers(argv[1]);
-    std::string completeStr;
-    fileWorkers.getCompleteFile(completeStr);
-
-    WorkManager workManager(completeStr, inventory, finalScore); 
-
-    CollectorManager collectorManager(completeStr, trigoQueue, maderaQueue, 
-                                    carHieQueue, inventory);
-
-    FileReader fileMap(argv[2]);
-    std::thread map {MapReader(fileMap, trigoQueue, maderaQueue, carHieQueue)};
-
+int finish(std::thread &map, ResBlockingQueue &trigoQueue, 
+            ResBlockingQueue &maderaQueue, ResBlockingQueue &carHieQueue,
+            CollectorManager &collectorManager, Inventory &inventory,
+            WorkManager &workManager) {
     map.join();
 
     trigoQueue.close();
@@ -38,6 +27,35 @@ int work(char const *argv[], ResBlockingQueue &trigoQueue,
     inventory.close();
 
     workManager.join();
+
+    return SUCCESS;
+}
+
+int work(char const *argv[], ResBlockingQueue &trigoQueue, 
+        ResBlockingQueue &maderaQueue, ResBlockingQueue &carHieQueue,
+        Inventory &inventory, Score &finalScore) {
+    FileReader fileWorkers(argv[1]);
+    if (!fileWorkers.isOpen()) {
+        return ERROR;
+    }
+    std::string completeStr;
+    fileWorkers.getCompleteFile(completeStr);
+
+    WorkManager workManager(completeStr, inventory, finalScore); 
+
+    CollectorManager collectorManager(completeStr, trigoQueue, maderaQueue, 
+                                    carHieQueue, inventory);
+
+    FileReader fileMap(argv[2]);
+    if (!fileMap.isOpen()) {
+        return ERROR;
+    }
+    std::thread map {MapReader(fileMap, trigoQueue, maderaQueue, carHieQueue)};
+
+    if (finish(map, trigoQueue, maderaQueue, carHieQueue, collectorManager, 
+                inventory, workManager) == ERROR) {
+        return ERROR;
+    }
 
     return SUCCESS;
 }
