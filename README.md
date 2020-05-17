@@ -9,11 +9,9 @@
 
 # Introducción
 
-&nbsp;&nbsp;&nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;&nbsp; El presente trabajo práctico fue realizado con la finalidad de incorporar conceptos de manejo de threads.
 
-# Aclaraciones
-
-&nbsp;&nbsp;&nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;&nbsp; Se desarrollo un programa en el que recolectores y productores trabajan en simultáneo a través de threads, conectados por objetos de almacenamiento bloqueantes.
 
 # Desarrollo
 
@@ -80,7 +78,7 @@ Recursos restantes:
 Puntos de Beneficio acumulados: x
 ~~~
 
-&nbsp;&nbsp;&nbsp;&nbsp; Donde x es el número entero que representa la cantidad de recursos restantes, en el caso de los recursos, o loa puntos de beneficios acumulados al finalizar el programa.
+&nbsp;&nbsp;&nbsp;&nbsp; Donde x es el número entero que representa la cantidad de recursos restantes, en el caso de los recursos, o los puntos de beneficios acumulados al finalizar el programa.
 
 &nbsp;&nbsp;&nbsp;&nbsp; La siguiente imagen representa la dependencia de cada objeto.
 
@@ -103,24 +101,26 @@ Puntos de Beneficio acumulados: x
     3. **Score**: Implementa el resultado final. Se encarga de ir almacenando los `puntos de beneficio` que le envían los trabajadores y, al finalizar el programa, imprime estos puntos y los recursos restantes del inventario. Se instancia un único objeto de esta clase.
 
 - Sector 2: aquí se encuentran las clases que se asocian a algún hilo y son las encargadas de la ejecución principal del programa.
-# COMPLETAAAR
-    1. **Worker**:
-    2. **Collector**:
-    3. **MapReader**:
+
+    1. **Collector**: Implementa al `recolector`, que le pide a la `cola bloqueante` el recurso que necesita y lo envía al `inventario`.
+    2. **Worker**: Implementa al `productor`, que le pide al `inventario` los recursos que necesita y los convierten en puntos de beneficios, los cuales van al `Score`.
+    3. **MapReader**: Implementa al `lector del mapa`. Este lee el archivo de texto `mapa.txt`, crea los `recursos` y los envía a las `colas bloqueantes`.
 
 - Sector 3: aquí se encuentran las clases que se encargas de controlar a los trabajadores.
-# COMPLETAAAR
-    1. **WorkMaganer**:
-    2. **CollectorManager**:
+
+    1. **CollectorManager**: Implementa una clase que se encarga de crear, inicializar y destruir a los objetos de tipo `Collector`.
+    2. **WorkMaganer**: Implementa una clase que se encarga de crear, inicializar y destruir a los objetos de tipo `Worker`.
 
 - Sector 4: aquí se encuentran las otras clases, que sirven para completar el desarrollo del programa.
-# COMPLETAAAR
-    1. **Resource**:
-    2. **FileReader**:
 
-# PONER DIAGRAMAS
+    1. **Resource**: Implementa la clase `Recurso`.
+    2. **FileReader**: Implementa una clase que sirve de lector de texto. Se creó esta clase para no permitir que queden archivos abiertos.
 
-# COMPLETAAAR
+&nbsp;&nbsp;&nbsp;&nbsp; A continuación se muestran distintos diagramas para detallar la implementación.
+
+![Clases Principales](img/clasesprincipales.png)
+
+&nbsp;&nbsp;&nbsp;&nbsp; Este diagrama de clases muestra la implementación de las clases encargadas del flujo principal del programa. El `MapReader`, que cuenta con un `FileReader`, se encarga de leer el mapa y enviar `Recursos` a cada una de las 3 `ResBlockingQueue's` que tiene asignada. Luego, los `Collector's` se encargan de retirar de su correspondiente `ResBlockingQueue` un `Recurso`, para luego enviarlo al `Inventory`. Del `Inventory` toman los recursos, una vez que están disponibles, los distintos `Worker's`. Estos se encargan de convertir los `Recursos` en puntos de beneficios, actualizando al `finalScore` del objeto de clase `Score`.
 
 ## Dificultades en el Desarrollo
 
