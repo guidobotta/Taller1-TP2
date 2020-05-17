@@ -109,7 +109,7 @@ Puntos de Beneficio acumulados: x
 - Sector 3: aquí se encuentran las clases que se encargas de controlar a los trabajadores.
 
     1. **CollectorManager**: Implementa una clase que se encarga de crear, inicializar y destruir a los objetos de tipo `Collector`.
-    2. **WorkMaganer**: Implementa una clase que se encarga de crear, inicializar y destruir a los objetos de tipo `Worker`.
+    2. **WorkManager**: Implementa una clase que se encarga de crear, inicializar y destruir a los objetos de tipo `Worker`.
 
 - Sector 4: aquí se encuentran las otras clases, que sirven para completar el desarrollo del programa.
 
@@ -122,6 +122,10 @@ Puntos de Beneficio acumulados: x
 
 &nbsp;&nbsp;&nbsp;&nbsp; Este diagrama de clases muestra la implementación de las clases encargadas del flujo principal del programa. El `MapReader`, que cuenta con un `FileReader`, se encarga de leer el mapa y enviar `Recursos` a cada una de las 3 `ResBlockingQueue's` que tiene asignada. Luego, los `Collector's` se encargan de retirar de su correspondiente `ResBlockingQueue` un `Recurso`, para luego enviarlo al `Inventory`. Del `Inventory` toman los recursos, una vez que están disponibles, los distintos `Worker's`. Estos se encargan de convertir los `Recursos` en puntos de beneficios, actualizando al `finalScore` del objeto de clase `Score`.
 
+![Clases Manager](img/clasesmanager.png)
+
+&nbsp;&nbsp;&nbsp;&nbsp; El anterior diagrama de clases muestra la conexión entre las clases `Manager` y las `Trabajadoras`. Las clase `Manager` son las encargadas de obtener del archivo, leido por un `FileReader`, las cantidades de cada `Recolector`, en el caso de `CollectorManager`, y de cada `Trabajador`, del lado de `WorkManager`. Una vez obtenidas las cantidades, crean entre 0 y n (n un numero natural) de cada clase `trajadora`. Una vez finalizada la ejecución de los `trabajadores`, los `managers` se encargan de asegurarse que no haya errores en la ejecución, realizando un `join` sobre cada hilo existente.
+
 ## Dificultades en el Desarrollo
 
 &nbsp;&nbsp;&nbsp;&nbsp; A continuación se mencionaran ciertos escenarios que presentaron alguna dificultad en el desarrollo:
@@ -130,8 +134,8 @@ Puntos de Beneficio acumulados: x
 
 2. Otro de los mayores problemas fue el de debuggear threads. Al ejecutar un debugger y correrlo con normalidad como si se tratase cualquier programa sin threads, se presenta la complicación del switch entre threads que realiza el procesador en momentos inpredecibles. Si bien algunos editores de texto como `Visual Studio Code` presentan algunas herramientas para tratar con estos, no deja de ser una tarea difícil.
 
-# COMPLETAAAR
-
 # Conclusiones
-# COMPLETAAAR
-&nbsp;&nbsp;&nbsp;&nbsp; 
+
+&nbsp;&nbsp;&nbsp;&nbsp; Trabajar con hilos puede ser muy complicado y dificil a la hora de debuggear. Aún así, son necesarios a la hora de crear un programa de gran escala, ya que la posibilidad de ejecutar diferentes tareas en paralelo puede ser muy beneficioso sobre el rendimiento. Esto hay que tratarlo con cuidado, ya que si se abusa sin sentido de estos recursos, puede llegar a bajar el rendimiento del programa.
+
+&nbsp;&nbsp;&nbsp;&nbsp; En este trabajo puede no ser tan notoria la diferencia de rendimiento, aunque el hecho de que los trabajadores tengan que dormir para simular trabajo, hace que otros hilos puedan aprovechar y seguir trabajando. Se realizó el experimento de hacer un mapa con muchos recursos y trabajar distintas cantidades de trabajadores. Pero si bien se nota una diferencia, no creo que sea el mejor de los ejemplos para dar en cuanto a rendimiento.
