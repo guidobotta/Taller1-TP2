@@ -21,7 +21,7 @@ class MainController {
         MapReader map;
 
     public:
-        MainController(std::ifstream &aWorkersFile, std::ifstream &aMapFile);
+        MainController(std::ifstream &workersFile, std::ifstream &mapFile);
         ~MainController();
         void run();
 };

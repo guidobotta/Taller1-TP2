@@ -2,14 +2,14 @@
 #include <string>
 #include <sstream>
 
-MainController::MainController(std::ifstream &aWorkersFile, 
-                                std::ifstream &aMapFile) :
+MainController::MainController(std::ifstream &workersFile, 
+                                std::ifstream &mapFile) :
                             workManager(inventory, finalScore),
                             collectorManager(wheatQueue, woodQueue,
                                              coalIronQueue, inventory),
-                            map(aMapFile, wheatQueue, woodQueue, coalIronQueue) {
+                            map(mapFile, wheatQueue, woodQueue, coalIronQueue) {
     std::string line;
-    while (std::getline(aWorkersFile, line)) {
+    while (std::getline(workersFile, line)) {
         std::istringstream iss(line);
         std::string type;
         int amount;

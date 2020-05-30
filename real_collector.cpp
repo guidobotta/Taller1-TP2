@@ -4,8 +4,9 @@
 #include <unistd.h>
 #include <iostream>
 
-RealCollector::RealCollector(ResBlockingQueue &aResQueue, Inventory &anInventory) : 
-    resQueue(aResQueue), inventory(anInventory) {}
+RealCollector::RealCollector(ResBlockingQueue &aResQueue, 
+                             Inventory &anInventory) : resQueue(aResQueue), 
+                                                       inventory(anInventory) {}
 
 void RealCollector::run() {
     try {

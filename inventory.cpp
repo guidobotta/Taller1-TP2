@@ -47,7 +47,7 @@ bool Inventory::take(int wheat, int wood, int coal, int iron) {
 
     while (!this->enoughMaterials(wheat, wood, coal, iron)) {
         if (this->closed) {
-            return false; /*throw EmptyException();*/
+            return false;
         }
         condVar.wait(lk);
     }
