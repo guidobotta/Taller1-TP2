@@ -13,7 +13,7 @@ class MainController {
     private:
         ResBlockingQueue wheatQueue;
         ResBlockingQueue woodQueue;
-        ResBlockingQueue carHieQueue;
+        ResBlockingQueue coalIronQueue;
         Inventory inventory;
         Score finalScore;
         WorkManager workManager;

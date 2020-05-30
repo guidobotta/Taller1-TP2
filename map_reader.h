@@ -7,13 +7,13 @@
 class MapReader {
     private: 
         std::ifstream &mapFile;
-        ResBlockingQueue &triQueue;
-        ResBlockingQueue &madQueue;
-        ResBlockingQueue &carHieQueue;
+        ResBlockingQueue &wheatQueue;
+        ResBlockingQueue &woodQueue;
+        ResBlockingQueue &coalIronQueue;
 
     public:
-        MapReader(std::ifstream &mapFile, ResBlockingQueue &aTriQueue,
-                ResBlockingQueue &aMadQueue, ResBlockingQueue &aCarHieQueue);
+        MapReader(std::ifstream &mapFile, ResBlockingQueue &aWheatQueue,
+                ResBlockingQueue &aWoodQueue, ResBlockingQueue &aCoalIronQueue);
         void run();
 };
 

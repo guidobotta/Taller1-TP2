@@ -6,8 +6,8 @@ MainController::MainController(std::ifstream &aWorkersFile,
                                 std::ifstream &aMapFile) :
                             workManager(inventory, finalScore),
                             collectorManager(wheatQueue, woodQueue,
-                                             carHieQueue, inventory),
-                            map(aMapFile, wheatQueue, woodQueue, carHieQueue) {
+                                             coalIronQueue, inventory),
+                            map(aMapFile, wheatQueue, woodQueue, coalIronQueue) {
     std::string line;
     while (std::getline(aWorkersFile, line)) {
         std::istringstream iss(line);
@@ -33,7 +33,7 @@ void MainController::run() {
 MainController::~MainController() {
     this->wheatQueue.close();
     this->woodQueue.close();
-    this->carHieQueue.close();
+    this->coalIronQueue.close();
 
     this->collectorManager.join();
 

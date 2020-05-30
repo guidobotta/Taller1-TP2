@@ -2,10 +2,10 @@
 #include "resource.h"
 #include <string>
 
-MapReader::MapReader(std::ifstream &mapFile, ResBlockingQueue &aTriQueue,
-                ResBlockingQueue &aMadQueue, ResBlockingQueue &aCarHieQueue) :
-                mapFile(mapFile), triQueue(aTriQueue),
-                madQueue(aMadQueue), carHieQueue(aCarHieQueue) {}
+MapReader::MapReader(std::ifstream &mapFile, ResBlockingQueue &aWheatQueue,
+                ResBlockingQueue &aWoodQueue, ResBlockingQueue &aCoalIronQueue)
+                : mapFile(mapFile), wheatQueue(aWheatQueue),
+                  woodQueue(aWoodQueue), coalIronQueue(aCoalIronQueue) {}
 
 void MapReader::run() {
     std::string line;
@@ -13,19 +13,19 @@ void MapReader::run() {
         for (std::size_t i = 0; i < line.length(); i++) {
             switch (line[i]) {
             case 'T':
-                this->triQueue.push(Resource(WHEAT));
+                this->wheatQueue.push(Resource(WHEAT));
                 break;
             
             case 'M':
-                this->madQueue.push(Resource(WOOD));
+                this->woodQueue.push(Resource(WOOD));
                 break;
 
             case 'C':
-                this->carHieQueue.push(Resource(COAL));
+                this->coalIronQueue.push(Resource(COAL));
                 break;
 
             case 'H':
-                this->carHieQueue.push(Resource(IRON));
+                this->coalIronQueue.push(Resource(IRON));
                 break;
             }
         }
