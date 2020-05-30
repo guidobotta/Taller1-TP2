@@ -1,16 +1,41 @@
 #include "collector.h"
-#include <unistd.h>
 
-#include <iostream>
+Collector::Collector(ResBlockingQueue &aResQueue, Inventory &anInventory) {
+    this->collector = new RealCollector(aResQueue, anInventory);
+}
 
-Collector::Collector(ResBlockingQueue &aResQueue, Inventory &anInventory) : 
-    resQueue(aResQueue), inventory(anInventory) {}
+Collector::Collector(Collector&& other) {
+    this->collector = other.collector;
+    other.collector = nullptr;
+}
 
-void Collector::operator()() {
-    const Resource *resource = this->resQueue.pop();
-    while (resource != NULL) {
-        usleep(60000);
-        inventory.add(resource);
-        resource = this->resQueue.pop();
+Collector::~Collector() {
+    delete(this->collector);
+}
+
+Collector& Collector::operator=(Collector&& other) {
+    if (this == &other) {
+        return *this;
     }
+
+    if ((this->collector != other.collector) && (this->collector)) {
+        delete(this->collector);
+    }
+
+    this->collector = other.collector;
+    other.collector = nullptr;
+
+    return *this;
+}
+
+bool Collector::operator==(const Collector &other) {
+    return this->collector == other.collector;
+}
+
+void Collector::start() {
+    this->collector->start();
+}
+
+void Collector::join() {
+    this->collector->join();
 }

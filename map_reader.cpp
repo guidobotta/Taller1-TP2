@@ -2,32 +2,30 @@
 #include "resource.h"
 #include <string>
 
-MapReader::MapReader(FileReader &aFileReader, ResBlockingQueue &aTriQueue,
+MapReader::MapReader(std::ifstream &mapFile, ResBlockingQueue &aTriQueue,
                 ResBlockingQueue &aMadQueue, ResBlockingQueue &aCarHieQueue) :
-                fileReader(aFileReader), triQueue(aTriQueue),
+                mapFile(mapFile), triQueue(aTriQueue),
                 madQueue(aMadQueue), carHieQueue(aCarHieQueue) {}
 
-void MapReader::operator()() {
+void MapReader::run() {
     std::string line;
-    while (!this->fileReader.eof()) {
-        this->fileReader.getLine(line);
-
+    while (std::getline(this->mapFile, line)) {
         for (std::size_t i = 0; i < line.length(); i++) {
             switch (line[i]) {
             case 'T':
-                this->triQueue.push(new Resource(TRIGO));
+                this->triQueue.push(Resource(WHEAT));
                 break;
             
             case 'M':
-                this->madQueue.push(new Resource(MADERA));
+                this->madQueue.push(Resource(WOOD));
                 break;
 
             case 'C':
-                this->carHieQueue.push(new Resource(CARBON));
+                this->carHieQueue.push(Resource(COAL));
                 break;
 
             case 'H':
-                this->carHieQueue.push(new Resource(HIERRO));
+                this->carHieQueue.push(Resource(IRON));
                 break;
             }
         }

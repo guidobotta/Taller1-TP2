@@ -1,30 +1,46 @@
 #include "worker.h"
+#include "empty_exception.h"
+#include <exception>
 #include <unistd.h>
+#include <iostream>
 
 Worker::Worker(Inventory &anInventory, Score &anScore, 
-                const WorkType &aWorkType) : inventory(anInventory), 
-                                        score(anScore), workType(aWorkType) {}
+                const WorkType &aWorkType) {
+    this->worker = new RealWorker(anInventory, anScore, aWorkType);
+}
 
-void Worker::operator()() {
-    bool invActive = true;
-    while (invActive) {
-        switch (this->workType) {
-        case COCINERO:
-            if ((invActive = this->inventory.take(2, 0, 1, 0))) {
-                this->score.addToScore(5);
-            }
-            break;
-        case CARPINTERO:
-            if ((invActive = this->inventory.take(0, 3, 0, 1))) {
-                this->score.addToScore(2);
-            }
-            break;
-        case ARMERO:
-            if ((invActive = this->inventory.take(0, 0, 2, 2))) {
-                this->score.addToScore(3);
-            }
-            break;
-        }
-        usleep(60000);
+Worker::Worker(Worker&& other) {
+    this->worker = other.worker;
+    other.worker = nullptr;
+}
+
+Worker::~Worker() {
+    delete(this->worker);
+}
+
+Worker& Worker::operator=(Worker&& other) {
+    if (this == &other) {
+        return *this;
     }
+
+    if ((this->worker != other.worker) && (this->worker)) {
+        delete(this->worker);
+    }
+
+    this->worker = other.worker;
+    other.worker = nullptr;
+
+    return *this;
+}
+
+bool Worker::operator==(const Worker &other) {
+    return this->worker == other.worker;
+}
+
+void Worker::start() {
+    this->worker->start();
+}
+
+void Worker::join() {
+    this->worker->join();
 }

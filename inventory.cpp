@@ -1,110 +1,74 @@
 #include "inventory.h"
+#include <iostream>
 
-Inventory::Inventory() : isClosed(false) {}
+Inventory::Inventory() : wheatAmount(0), woodAmount(0), coalAmount(0),
+                         ironAmount(0), closed(false) {}
 
-void Inventory::add(const Resource *item) {
+void Inventory::add(const Resource &item) {
     std::unique_lock<std::mutex> lk(mux);
-    ResType type = (*item).getResourceType();
+    ResType type = item.getResourceType();
 
     switch (type) {
-    case TRIGO:
-        this->triList.push_back(item);
+    case WHEAT:
+        wheatAmount++;
         break;
-    case MADERA:
-        this->madList.push_back(item);
+    case WOOD:
+        woodAmount++;
         break;
-    case CARBON:
-        this->carList.push_back(item);
+    case COAL:
+        coalAmount++;
         break; 
-    case HIERRO:
-        this->hieList.push_back(item);
+    case IRON:
+        ironAmount++;
         break;
     }
 
     this->condVar.notify_all();
 }
 
-bool Inventory::enoughMaterials(int trigo, int madera, int carbon, int hierro) {
+bool Inventory::enoughMaterials(int wheat, int wood, int coal, int iron) {
     bool isEnough = true;
-    isEnough = isEnough && (this->getTrigoAmount() >= trigo);
-    isEnough = isEnough && (this->getMaderaAmount() >= madera);
-    isEnough = isEnough && (this->getCarbonAmount() >= carbon);
-    isEnough = isEnough && (this->getHierroAmount() >= hierro);
+    isEnough = isEnough && (this->wheatAmount >= wheat);
+    isEnough = isEnough && (this->woodAmount >= wood);
+    isEnough = isEnough && (this->coalAmount >= coal);
+    isEnough = isEnough && (this->ironAmount >= iron);
     return isEnough;
 }
 
-void Inventory::getDelete(int trigo, int madera, int carbon, int hierro) {
-    for (int i = 0; i < trigo; i++) {
-        delete(triList.back());
-        triList.pop_back();
-    }
-
-    for (int i = 0; i < madera; i++) {
-        delete(madList.back());
-        madList.pop_back();
-    }
-
-    for (int i = 0; i < carbon; i++) {
-        delete(carList.back());
-        carList.pop_back();
-    }
-
-    for (int i = 0; i < hierro; i++) {
-        delete(hieList.back());
-        hieList.pop_back();
-    }
+void Inventory::decreaseAmount(int wheat, int wood, int coal, int iron) {
+    this->wheatAmount -= wheat;
+    this->woodAmount -= wood;
+    this->coalAmount -= coal;
+    this->ironAmount -= iron;
 }
 
-bool Inventory::take(int trigo, int madera, int carbon, int hierro) {
+bool Inventory::take(int wheat, int wood, int coal, int iron) {
     std::unique_lock<std::mutex> lk(mux);
 
-    while (!this->enoughMaterials(trigo, madera, carbon, hierro)) {
-        if (this->isClosed) {
-            return false;
+    while (!this->enoughMaterials(wheat, wood, coal, iron)) {
+        if (this->closed) {
+            return false; /*throw EmptyException();*/
         }
         condVar.wait(lk);
     }
 
-    this->getDelete(trigo, madera, carbon, hierro);
+    this->decreaseAmount(wheat, wood, coal, iron);
     return true;
 }
 
-int Inventory::getTrigoAmount() {
-    return this->triList.size();
-}
-
-int Inventory::getMaderaAmount() {
-    return this->madList.size();
-}
-
-int Inventory::getCarbonAmount() {
-    return this->carList.size();
-}
-
-int Inventory::getHierroAmount() {
-    return this->hieList.size();
+void Inventory::printResources() {
+    std::cout << "Recursos restantes:" << std::endl;
+    std::cout << "  - Trigo: " << this->wheatAmount  << std::endl;
+    std::cout << "  - Madera: " << this->woodAmount << std::endl;
+    std::cout << "  - Carbon: " << this->coalAmount << std::endl;
+    std::cout << "  - Hierro: " << this->ironAmount << std::endl;
+    std::cout << std::endl;
 }
 
 void Inventory::close() {
-    this->isClosed = true;
+    std::unique_lock<std::mutex> lk(mux);
+    this->closed = true;
     this->condVar.notify_all();
 }
 
-Inventory::~Inventory() {
-    while (!this->triList.empty()) {
-        delete(triList.back());
-        triList.pop_back();
-    }
-    while (!this->madList.empty()) {
-        delete(madList.back());
-        madList.pop_back();
-    }
-    while (!this->carList.empty()) {
-        delete(carList.back());
-        carList.pop_back();
-    }
-    while (!this->hieList.empty()) {
-        delete(hieList.back());
-        hieList.pop_back();
-    }
-}
+Inventory::~Inventory() {}

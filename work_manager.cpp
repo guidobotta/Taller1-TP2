@@ -2,26 +2,30 @@
 #include "worker.h"
 #include <string>
 
-void WorkManager::findStartWorker(const std::string &strConfig, 
-                                Inventory &inventory, Score &score,
-                                const std::string &tipo, WorkManager *wM,
-                                const WorkType &aWorkType) {
-    std::string::size_type wordIndex;
-    int nWorkers;
-    wordIndex = strConfig.find(tipo);
-    nWorkers = std::stoi(strConfig.substr(wordIndex + tipo.length() + 1));
-    for (int i = 0; i < nWorkers; i++) {
-        wM->workerList.push_back(std::thread { Worker(inventory, score, 
-                                                aWorkType) });
+WorkManager::WorkManager(Inventory &anInventory, Score &aScore) : 
+                                    inventory(anInventory), score(aScore) {}
+
+void WorkManager::addWorker(std::string &type, int amount) {
+    WorkType workType;
+    
+    if (type == "Cocineros") {
+        workType = COCINERO;
+    } else if (type == "Carpinteros") {
+        workType = CARPINTERO;
+    } else if (type == "Armeros") {
+        workType = ARMERO;
+    }
+
+    for (int i = 0; i < amount; i++) {
+        this->workerList.push_back(Worker(this->inventory, this->score, 
+                                          workType));
     }
 }
 
-WorkManager::WorkManager(const std::string &strConfig, Inventory &inventory, 
-                        Score &score) {
-    findStartWorker(strConfig, inventory, score, "Cocineros", this, COCINERO);
-    findStartWorker(strConfig, inventory, score, "Carpinteros", this, 
-                    CARPINTERO);
-    findStartWorker(strConfig, inventory, score, "Armeros", this, ARMERO);
+void WorkManager::run() {
+    for (std::size_t i = 0; i < this->workerList.size(); i++) {
+        this->workerList[i].start();
+    }
 }
 
 void WorkManager::join() {

@@ -4,21 +4,27 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include <fstream>
 
 #include "res_blocking_queue.h"
 #include "inventory.h"
+#include "collector.h"
 
 class CollectorManager {
     private:
-        std::vector <std::thread> collectorList;
-        static void findStartCollector(const std::string &strConfig, 
-                                ResBlockingQueue &queue, Inventory &inventory, 
-                                const std::string &tipo, CollectorManager *cM);
+        std::vector <Collector> collectorList;
+        ResBlockingQueue &wheatQueue;
+        ResBlockingQueue &woodQueue;
+        ResBlockingQueue &coalIronQueue;
+        Inventory &inventory;
 
     public:
-        CollectorManager(const std::string &strConfig, 
-                ResBlockingQueue &trigoQueue, ResBlockingQueue &maderaQueue, 
-                ResBlockingQueue &carHieQueue, Inventory &inventory);
+        CollectorManager(ResBlockingQueue &aWheatQueue, 
+                         ResBlockingQueue &aWoodQueue, 
+                         ResBlockingQueue &aCoalIronQueue, 
+                         Inventory &anInventory);
+        void addCollector(const std::string &type, int amount);
+        void run();
         void join();
 };
 

@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <thread>
+#include <fstream>
 
 #include "inventory.h"
 #include "score.h"
@@ -11,15 +11,14 @@
 
 class WorkManager {
     private:
-        std::vector <std::thread> workerList;
-        static void findStartWorker(const std::string &strConfig, 
-                                Inventory &inventory, Score &score,
-                                const std::string &tipo, WorkManager *wM,
-                                const WorkType &aWorkType);
+        std::vector <Worker> workerList;
+        Inventory &inventory;
+        Score &score;
 
     public:
-        WorkManager(const std::string &strConfig, Inventory &inventory, 
-                    Score &score);
+        WorkManager(Inventory &anInventory, Score &aScore);
+        void addWorker(std::string &type, int amount);
+        void run();
         void join();
 };
 

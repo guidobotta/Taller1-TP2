@@ -8,15 +8,15 @@
 
 class ResBlockingQueue {
     private:
-        std::queue<const Resource*> resQueue;
+        std::queue<Resource> resQueue;
         std::mutex mux;
         std::condition_variable condVar;
         bool isClosed;
 
     public:
         ResBlockingQueue();
-        void push(const Resource* res);
-        const Resource* pop();
+        void push(const Resource &res);
+        const Resource pop();
         void close();
         bool isEmpty();
         ~ResBlockingQueue();

@@ -2,19 +2,19 @@
 #define __MAP_READER_H__
 
 #include "res_blocking_queue.h"
-#include "file_reader.h"
+#include <fstream>
 
 class MapReader {
     private: 
-        FileReader &fileReader;
+        std::ifstream &mapFile;
         ResBlockingQueue &triQueue;
         ResBlockingQueue &madQueue;
         ResBlockingQueue &carHieQueue;
 
     public:
-        MapReader(FileReader &aFileReader, ResBlockingQueue &aTriQueue,
+        MapReader(std::ifstream &mapFile, ResBlockingQueue &aTriQueue,
                 ResBlockingQueue &aMadQueue, ResBlockingQueue &aCarHieQueue);
-        void operator()();
+        void run();
 };
 
 #endif

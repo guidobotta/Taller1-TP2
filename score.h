@@ -2,14 +2,15 @@
 #define __SCORE_H__
 
 #include "inventory.h"
+#include <mutex>
 
 class Score {
     private:
-        int finalScore;
-        Inventory &inventory;
+        int score;
+        std::mutex mux;
 
     public:
-        explicit Score(Inventory &anInventory);
+        explicit Score();
         void addToScore(int points);
         void printScore();
 };

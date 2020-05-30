@@ -1,29 +1,32 @@
 #include "res_blocking_queue.h"
+#include "empty_exception.h"
+#include <utility>
 
 ResBlockingQueue::ResBlockingQueue() : isClosed(false) {}
 
-void ResBlockingQueue::push(const Resource* res) {
+void ResBlockingQueue::push(const Resource &res) {
     std::unique_lock<std::mutex> lk(mux);
-    this->resQueue.push(res);
+    this->resQueue.emplace(std::move(res));
     this->condVar.notify_all();
 }
 
-const Resource* ResBlockingQueue::pop() {
+const Resource ResBlockingQueue::pop() {
     std::unique_lock<std::mutex> lk(mux);
 
     while (this->resQueue.empty()) {
         if (this->isClosed) {
-            return NULL;
+            throw EmptyException();
         }
         condVar.wait(lk);
     }
 
-    const Resource* element = this->resQueue.front();
+    const Resource element(std::move(this->resQueue.front()));
     this->resQueue.pop();
-    return element;
+    return std::move(element);
 }
 
 void ResBlockingQueue::close() {
+    std::unique_lock<std::mutex> lk(mux);
     this->isClosed = true;
     this->condVar.notify_all();
 }
@@ -33,9 +36,4 @@ bool ResBlockingQueue::isEmpty() {
     return this->resQueue.empty();
 }
 
-ResBlockingQueue::~ResBlockingQueue() {
-    while (!this->resQueue.empty()) {
-        delete(this->resQueue.front());
-        this->resQueue.pop();
-    }
-}
+ResBlockingQueue::~ResBlockingQueue() {}

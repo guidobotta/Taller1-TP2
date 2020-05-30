@@ -2,24 +2,35 @@
 #include "collector.h"
 #include <string>
 
-void CollectorManager::findStartCollector(const std::string &strConfig, 
-                            ResBlockingQueue &queue, Inventory &inventory,
-                            const std::string &tipo, CollectorManager *cM) {
-    std::string::size_type wordIndex;
-    int nCollectors;
-    wordIndex = strConfig.find(tipo);
-    nCollectors = std::stoi(strConfig.substr(wordIndex + tipo.length() + 1));
-    for (int i = 0; i < nCollectors; i++) {
-        cM->collectorList.push_back(std::thread {Collector(queue, inventory)});
+CollectorManager::CollectorManager(ResBlockingQueue &aWheatQueue, 
+                                   ResBlockingQueue &aWoodQueue, 
+                                   ResBlockingQueue &aCoalIronQueue, 
+                                   Inventory &anInventory) : 
+                                   wheatQueue(aWheatQueue),
+                                   woodQueue(aWoodQueue),
+                                   coalIronQueue(aCoalIronQueue),
+                                   inventory(anInventory) {}
+
+void CollectorManager::addCollector(const std::string &type, int amount) {
+    ResBlockingQueue *queue = nullptr;
+
+    if (type == "Agricultores") {
+        queue = &this->wheatQueue;
+    } else if (type == "Leniadores") {
+        queue = &this->woodQueue;
+    } else if (type == "Mineros") {
+        queue = &this->coalIronQueue;
+    }
+
+    for (int i = 0; i < amount; i++) {
+        this->collectorList.push_back(Collector(*queue, this->inventory));
     }
 }
 
-CollectorManager::CollectorManager(const std::string &strConfig, 
-                ResBlockingQueue &trigoQueue, ResBlockingQueue &maderaQueue, 
-                ResBlockingQueue &carHieQueue, Inventory &inventory) {
-    findStartCollector(strConfig, trigoQueue, inventory, "Agricultores", this);
-    findStartCollector(strConfig, maderaQueue, inventory, "Leniadores", this);
-    findStartCollector(strConfig, carHieQueue, inventory, "Mineros", this);
+void CollectorManager::run() {
+    for (std::size_t i = 0; i < this->collectorList.size(); i++) {
+        this->collectorList[i].start();
+    }
 }
 
 void CollectorManager::join() {

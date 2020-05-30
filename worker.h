@@ -1,26 +1,21 @@
 #ifndef __WORKER_H__
 #define __WORKER_H__
 
-#include "inventory.h"
-#include "score.h"
+#include "real_worker.h"
 
-enum WorkType {COCINERO, CARPINTERO, ARMERO};
-
-/*
- * Clase Trabajadora relacionada con
- * la salida del Inventario y con la
- * puntuación final.
-*/
 class Worker {
     private:
-        Inventory &inventory;
-        Score &score;
-        const WorkType workType;
+        RealWorker *worker;
 
     public:
         Worker(Inventory &anInventory, Score &anScore, 
                 const WorkType &aWorkType);
-        void operator()();
+        Worker(Worker&& other);
+        ~Worker();
+        Worker& operator=(Worker&& other);
+        bool operator==(const Worker &other);
+        void start();
+        void join();
 };
 
 #endif

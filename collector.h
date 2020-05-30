@@ -1,22 +1,20 @@
 #ifndef __COLLECTOR_H__
 #define __COLLECTOR_H__
 
-#include "res_blocking_queue.h"
-#include "inventory.h"
+#include "real_collector.h"
 
-/*
- * Clase Recolector relacionada con
- * la salida de la ColaBloqueante y
- * con la entrada del Inventario
-*/
 class Collector {
     private:
-        ResBlockingQueue &resQueue;
-        Inventory &inventory;
+        RealCollector* collector;
 
     public:
         Collector(ResBlockingQueue &aResQueue, Inventory &anInventory);
-        void operator()();
+        Collector(Collector&& other);
+        ~Collector();
+        Collector& operator=(Collector&& other);
+        bool operator==(const Collector &other);
+        void start();
+        void join();
 };
 
 #endif
