@@ -10,7 +10,7 @@ class Score {
         std::mutex mux;
 
     public:
-        explicit Score();
+        Score();
         void addToScore(int points);
         void printScore();
 };
