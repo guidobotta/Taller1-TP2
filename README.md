@@ -139,3 +139,26 @@ Puntos de Beneficio acumulados: x
 &nbsp;&nbsp;&nbsp;&nbsp; Trabajar con hilos puede ser muy complicado y dificil a la hora de debuggear. Aún así, son necesarios a la hora de crear un programa de gran escala, ya que la posibilidad de ejecutar diferentes tareas en paralelo puede ser muy beneficioso sobre el rendimiento. Esto hay que tratarlo con cuidado, ya que si se abusa sin sentido de estos recursos, puede llegar a bajar el rendimiento del programa.
 
 &nbsp;&nbsp;&nbsp;&nbsp; En este trabajo puede no ser tan notoria la diferencia de rendimiento, aunque el hecho de que los trabajadores tengan que dormir para simular trabajo, hace que otros hilos puedan aprovechar y seguir trabajando. Se realizó el experimento de hacer un mapa con muchos recursos y trabajar distintas cantidades de trabajadores. Pero si bien se nota una diferencia, no creo que sea el mejor de los ejemplos para dar en cuanto a rendimiento.
+
+# Apéndice
+
+## Correcciones en el Trabajo
+
+&nbsp;&nbsp;&nbsp;&nbsp; Se realizaron las siguientes modificaciones:
+
+- **main** y **MainController**: Se desarrolló una clase MainController para seguir el concepto RAII. Se dividió la ejecución del programa en tres etapas:
+  1. La construcción de los objetos a utilizar, que se construyen dentro del constructor de la clase `MainController`.
+  2. La ejecución del programa, que se ejecuta dentro de una función `run` de la clase `MainController`. En esta etapa se ejecutan las instancias de las clases `WorkManager` y `CollectorManager` donde se hechan a correr los hilos de las clases `Worker` y `Collector`.
+  3. La finalización del programa, que se ejecuta dentro del destructor de la clase `MainController`. En esta etapa se cierran las instancias de cada objeto y se llama a `join` para los hilos ejecutados.
+
+- **Hilo de MapReader**: Se eliminó el hilo del `MapReader` y se utilizó el hilo principal para realizar esta tarea ya que el main no hacía nada entre la instanciación de este hilo y la finalización de su ejecución.
+
+- **Score** e **Inventory**: Se creo una función `printResources` en la clase `Inventory` para quitar los `getters` de la clase `Inventory` y dividir así la impresión de los recursos restantes del puntaje final. Además, en la clase `Score` se agregó un `mutex` para evitar una race condition en el método `addToScore`. Por último, en el `Inventory` se cambió la implementación y se reemplazaron los vectores que almacenaban los recursos por sumadores, que llevan la cuenta de cuántos recursos de cada tipo llegaron.
+
+- **Worker**, **RealWorker**, **Collector** y **RealCollector**: A las clases trabajadoras se las hizo heredar de una clase `Thread` para poder separar la instaciación del objeto de la ejecución en el `MainController`. Además, se crearon dos clases extra para encapsular la instancia en el heap de las clases trabajadores. La clase `Worker` instancia un `new RealWorker`, quien tiene toda la lógica del productor, mientras que `Collector` instancia un `new RealCollector`, quien tiene la lógica del recolector. Esto permite que pase lo que pase no se pierda memoria, ya que en el destructor de las clases `Worker` y `Collector` se hace un `delete` de la instancia. A estas clases se las hizo `CopyAssignable` para poder almacenarlas sin problema en un vector.
+
+- **FileReader**: Se eliminó la clase `FileReader` y se utilizó simplemente un `std::ifstream`, que aplica el concepto RAII.
+
+- **Manejo de excepciones**: Se realizó un pequeño manejo de excepciones para reemplazar el manejo de errores al estilo C. Se decidió no profundizar mucho en esto y dar por hecho que el formato de los archivos estarían correctos y que no habría problema con el manejo de memoria. Para el manejo principal de excepciones se creo una excepción `OSError`. Además, se creo una excepción `EmptyException` para avisarle a los recolectores cuándo la cola de recursos esta vacía. Se podría haber llevado el mismo concepto al inventario con los trabajadores, pero me pareció más adecuado dejar la implementación actual donde se devuelve `true` o `false` dependiendo si el inventario pudo darle los elementos al trabajador o si lo cerraron. Se tomó esta decisión ya que los trabajadores no necesitan realmente de estos recursos, en el caso de que si lo necesitaran, se podría cambiar a la implementación de lanzar una excepción cuando el inventario este cerrado y no pueda devolver más nada.
+
+- **Cambios menores en lenguaje**: Se cambiaron algunos nombres de variables que mezclaban ingles y español a ingles. Lo único que se dejó en español son comentarios y manejos de errores.
